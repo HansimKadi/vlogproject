@@ -11,19 +11,21 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import o
+import os
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY from environment variables
-SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')  # Replace fallback with a secure default only for local dev
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# DEBUG from environment variables
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-!tub7#hz^mg%iu2zi$#^1$jsy)=v^gs#=4^c*@xb-4fr@$6ig0'
 
-# ALLOWED_HOSTS from environment variables
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
