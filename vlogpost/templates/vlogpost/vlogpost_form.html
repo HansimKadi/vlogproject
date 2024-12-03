@@ -1,0 +1,110 @@
+{% extends 'vlogpost/base.html' %}
+<!-- Inherit the header and footer from base template -->
+
+{% block title %}
+Create/Edit Vlog Post
+{% endblock %}
+<!-- Title block -->
+
+{% block content %}
+<div class="container mx-auto py-8">
+    
+    <!-- Main container with top and bottom padding -->
+    <h1 class="text-2xl font-bold text-center mb-8">Create post</h1>
+    <!-- Page header -->
+
+    <!-- Flash Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- Flash messages styled with Tailwind -->
+
+    <!-- Form -->
+    <form method="POST" class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <!-- Title -->
+        <div class="mb-4">
+            {{ form.title.errors }}
+            <label for="title" class="block text-sm font-medium text-gray-300">
+                {{ form.title.label_tag }}
+            </label>
+            {{ form.title }}
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+            {{ form.description.errors }}
+            <label for="description" class="block text-sm font-medium text-gray-300">
+                {{ form.description.label_tag }}
+            </label>
+            {{ form.description }}
+        </div>
+
+        <!-- Video URL -->
+        <div class="mb-4">
+            {{ form.video_url.errors }}
+            <label for="video_url" class="block text-sm font-medium text-gray-300">
+                {{ form.video_url.label_tag }}
+            </label>
+            {{ form.video_url }}
+        </div>
+
+        <!-- Author -->
+        <div class="mb-4">
+            {{ form.author.errors }}
+            <label for="author" class="block text-sm font-medium text-gray-300">
+                {{ form.author.label_tag }}
+            </label>
+            {{ form.author }}
+        </div>
+
+        <!-- Published Date -->
+        <div class="mb-4">
+            {{ form.published_date.errors }}
+            <label for="published_date" class="block text-sm font-medium text-gray-300">
+                {{ form.published_date.label_tag }}
+            </label>
+            {{ form.published_date }}
+        </div>
+
+        <!-- Tags -->
+        <div class="mb-4">
+            {{ form.tags.errors }}
+            <label for="tags" class="block text-sm font-medium text-gray-300">
+                {{ form.tags.label_tag }}
+            </label>
+            {{ form.tags }}
+        </div>
+
+        <!-- Category -->
+        <div class="mb-4">
+            <label for="id_category" class="block text-sm font-medium text-gray-300">Category:</label>
+            <select name="category" id="id_category" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" required>
+                <option value="">-- Select a Category --</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if form.instance.category and form.instance.category.id == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            {{ form.category.errors }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">
+            Publish
+        </button>
+    </form>
+
+    <!-- Back to List -->
+    <a href="{% url 'vlogpost_list' %}" class="block text-center text-blue-500 hover:underline mt-4">
+        Back to Vlog List
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'vlogpost/base.html' %}
+<!-- Inheriting the header and footer from the base.html template -->
+
+{% block title %}
+    {{ vlogpost.title }}
+{% endblock %}
+<!-- Page title block -->
+
+{% block content %}
+<div class="container mx-auto py-8">
+    <!-- main container with top/bottom padding -->
+
+    <header class="text-center py-6 border-b border-gray-700">
+        <h1 class="text-3xl font-bold">{{ vlogpost.title }}</h1>
+    </header>
+
+    <main class="mt-8">
+        <!-- main content section -->
+
+        <!-- video section -->
+        <section class="flex justify-center mb-8">
+            <!-- centers the video frame mb for spacing below section -->
+            {% if vlogpost.url %}
+            <iframe
+            src="{{ embed_url }}"
+            class="w-full max-w-3xl h-64 md:h-96 rounded-lg shadow-lg"
+            style="border: none;"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+            </iframe>
+         
+            <!--  src dynamically embeds the video dynamically embeds the video urls from the vlogpost
+            w-full: makes the iframe take the full width of its container  
+            max- restricts max width for big screens
+            h sets height for small screens
+            md addjusts height for medium screens
+        
+            -->
+            {% else %}
+                <p class="text-center text-gray-400">No video available.</p>
+            {% endif %}
+            <p class="text-center text-gray-400">Debug Info: {{ embed_url }}</p>
+        </section>
+
+        <!-- metadata section -->
+        <section class="flex justify-between items-center max-w-3x1 mx-auto text-sn text-gray-400 mb-8">
+            <!-- flex aranges the items horizontally
+             justify between places the items at oposite ends
+             items center vertically centers the items
+             max-w-3xl width restriction
+             mxauto centers the the section horizontally
+            text sm sets font to small
+            mb adds bottom margin for spacing
+             -->
+            <p><strong>Author: </strong>{{ vlogpost.author }}</p>
+            <!-- display author of the vlog-->
+            <p><strong>Published on: </strong>{{ vlogpost.published_date }}</strong></p>
+            <!-- display date of realease -->
+        </section>
+
+        <!-- description section -->
+        <section class="max-w-3x1 mx-auto mb-8">
+            <!-- maxwidth to 48 rem, mx auto for centering and bottom margin for spacing -->
+            <h3 class="text-xl font-semibold mb-4">Description: </h3>
+            <!-- section header with bottom spacing-->
+             <p class="text-gray-300">{{ vlogpost.description }}</p>
+                <!-- Description content-->
+        </section>
+
+        <section class="max-w-3x1 mx-auto">
+            <!--tags section-->
+            <h3 class="text-xl font-semibold mb-4">Tags: </h3>
+
+            <div class="flex flex-wrap gap-2">
+                <!-- flex aranges tags in flexible layout
+                flexwrap allows tags to wrap onto next line if they exceed the container width
+                -->
+                {% if vlogpost.get_tags %}
+                {% for tag in vlogpost.get_tags %}
+                <span class="bg-gray-700 text-white py-1 px-3 rounded-fuøø text-sm">
+                    {{ tag }}           
+                </span>
+                {% endfor %}
+                {% else %}
+                <p class="text-gray-400">No tags available</p>
+                <!-- fallback message -->
+                 {% endif %}
+            </div>
+        </section>
+    </main>
+</div>
+
+{% endblock %}

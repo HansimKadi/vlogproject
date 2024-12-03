@@ -1,0 +1,86 @@
+{% extends "vlogpost/base.html" %}
+{% block content %}
+<!-- Register Button -->
+<div class="text-center">
+    <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700" onclick="toggleRegisterModal()">
+        Register
+    </button>
+</div>
+
+<!-- Login Form -->
+<form method="POST" class="mt-8">
+    {% csrf_token %}
+    <div class="mb-4">
+        <label for="id_username" class="block text-sm font-medium text-gray-300">Username:</label>
+        <input type="text" name="username" id="id_username" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter your username">
+    </div>
+
+    <div class="mb-4">
+        <label for="id_password" class="block text-sm font-medium text-gray-300">Password:</label>
+        <input type="password" name="password" id="id_password" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter your password">
+    </div>
+
+    <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+        Login
+    </button>
+</form>
+
+<!-- Register Modal -->
+<div id="registerModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-gray-800 text-white rounded-lg w-11/12 md:w-1/2">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b border-gray-700 px-4 py-2">
+            <h2 class="text-xl font-bold">Register</h2>
+            <button class="text-gray-400 hover:text-gray-200" onclick="toggleRegisterModal()">&times;</button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-4">
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+                <!-- Username -->
+                <div class="mb-4">
+                    <label for="id_username" class="block text-sm font-medium text-gray-300">Username</label>
+                    <input type="text" id="id_username" name="username" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter your username">
+                </div>
+
+                <!-- Email -->
+                <div class="mb-4">
+                    <label for="id_email" class="block text-sm font-medium text-gray-300">Email</label>
+                    <input type="email" id="id_email" name="email" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter your email">
+                </div>
+
+                <!-- Password -->
+                <div class="mb-4">
+                    <label for="id_password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <input type="password" id="id_password" name="password1" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter your password">
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                    <label for="id_confirm_password" class="block text-sm font-medium text-gray-300">Confirm Password</label>
+                    <input type="password" id="id_confirm_password" name="password2" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Re-enter your password">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end">
+                    <button type="button" class="bg-gray-600 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 mr-2" onclick="toggleRegisterModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to toggle the registration modal
+    function toggleRegisterModal() {
+        const modal = document.getElementById('registerModal');
+        modal.classList.toggle('hidden');
+    }
+</script>
+{% endblock %}

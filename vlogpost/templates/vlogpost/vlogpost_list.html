@@ -1,0 +1,165 @@
+{% extends 'vlogpost/base.html' %}
+<!-- Inheriting the header and footer from the base.html template -->
+
+{% block title %}
+    Posts
+{% endblock %}
+<!-- Page title block -->
+
+{% block content %}
+<!-- Main Content -->
+<!-- Authenticated User Action Buttons -->
+<div class="container mx-auto py-4 flex justify-between items-center">
+    {% if user.is_authenticated %}
+        <!-- Create Button -->
+        <button class="bg-white text-gray-950 font-bold py-2 px-4 rounded hover:bg-gray-800" onclick="toggleModal()">
+            Create
+        </button>
+        
+        <!-- Logout Button -->
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-700">
+                Log Out
+            </button>
+        </form>
+    {% else %}
+        <!-- Sign In Button -->
+        <a href="{% url 'login' %}" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+            Sign In
+        </a>
+    {% endif %}
+</div>
+
+<!-- Main Content -->
+<div id="main-content" class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">Posts</h1>
+    <div class="space-y-6 mt-8">
+        <!-- Vertical list layout -->
+        {% for vlog in vlogs %}
+        <div class="flex bg-gray-700 rounded-lg shadow-lg overflow-hidden">
+            <!-- Vlog item -->
+            <div class="w-1/3">
+                <!-- Thumbnail -->
+                <a href="{% url 'vlogpost_detail' vlog.pk %}">
+                    <img src="{{ vlog.thumbnail_url }}" alt="Thumbnail" class="w-full h-full object-cover">
+                </a>
+            </div>
+
+            <div class="w-2/3 px-4">
+                <!-- Vlog details -->
+                <a href="{% url 'vlogpost_detail' vlog.pk %}" class="text-lg font-bold text-white hover:text-gray-300">
+                    {{ vlog.title }}
+                </a>
+
+                <p class="text-sm text-gray-400 mt-2">
+                    {{ vlog.author }} &bull; {{ vlog.views }} views &bull; {{ vlog.uploaded_ago }}
+                </p>
+
+                <p class="text-sm text-gray-300 mt-4">
+                    {{ vlog.description|truncatewords:20 }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+    <!-- Modal -->
+    <div id="createPostModal" class="fixed inset-0 top-20 bottom-20 bg-gray-800 bg-opacity-50 flex justify-center items-center hidden">
+        <!-- Modal: Positioned in the center of the viewport -->
+        <div class="bg-gray-800 text-white rounded-lg w-11/12 md:w-1/2">
+            <!-- Modal container -->
+            <div class="flex justify-between items-center border-b border-gray-700 px-4 py-2">
+                <!-- Modal header -->
+                <h2 class="text-xl font-bold">Create</h2>
+                <button class="text-gray-400 hover:text-gray-200" onclick="toggleModal()">&times;</button>
+                <!-- Close button -->
+            </div>
+
+            <div class="p-4">
+                <!-- Modal body -->
+                <form method="POST" action="{% url 'vlogpost_create' %}">
+                    {% csrf_token %}
+                    <!-- CSRF token for security -->
+
+                    <!-- Title -->
+                    <div class="mb-4">
+                        <!-- Margin Bottom for spacing -->
+                        <label for="title" class="block text-sm font-medium text-gray-300">Title</label>
+                        <input type="text" id="title" name="title" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter the title">
+                    </div>
+
+                    <!-- Author -->
+                    <div class="mb-4">
+                        <label for="author" class="block text-sm font-medium text-gray-300">Author</label>
+                        <input type="text" id="author" name="author" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter the author">
+                    </div>
+
+                    <!-- Video URL -->
+                    <div class="mb-4">
+                        <label for="video_url" class="block text-sm font-medium text-gray-300">Video URL</label>
+                        <input type="url" id="video_url" name="video_url" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter the video URL">
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="description" class="block text-sm font-medium text-gray-300">Description</label>
+                        <textarea id="description" name="description" rows="3" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter the description"></textarea>
+                    </div>
+
+                    <!-- Published Date -->
+                    <div class="mb-4">
+                        <label for="published_date" class="block text-sm font-medium text-gray-300">Published Date</label>
+                        <input type="date" id="published_date" name="published_date" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1">
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-4">
+                        <label for="tags" class="block text-sm font-medium text-gray-300">Tags</label>
+                        <input type="text" id="tags" name="tags" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1" placeholder="Enter tags, separated by commas">
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <label for="category" class="block text-sm font-medium text-gray-300">Category</label>
+                        <select id="category" name="category" class="w-full bg-gray-700 text-white rounded px-3 py-2 mt-1">
+                            <option value="" disabled selected>-- Select a Category --</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end">
+                        <button type="button" class="bg-gray-600 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 mr-2" onclick="toggleModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">
+                            Publish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<!-- JavaScript for modal toggle -->
+<script>
+    function toggleModal() {
+        const modal = document.getElementById('createPostModal');
+        const mainContent = document.getElementById('main-content');
+        modal.classList.toggle('hidden');
+        if (!modal.classList.contains('hidden')) {
+            mainContent.classList.add('blur'); // Add blur to the main content
+        } else {
+            mainContent.classList.remove('blur'); // Remove blur from the main content
+    }
+    }
+</script>
+
+{% endblock %}
+

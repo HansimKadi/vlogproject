@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html> <!-- tells browser this is a html document-->
+<html lang="en" class="h-full"> <!-- setting primary language-->
+
+<head> <!-- contains meta data , not visible but important for website-->
+    <meta charset="UTF-8"> <!-- Character encoding-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- viewport varies witch device and its the users visible area of a web page  --> 
+
+    <title>{% block title %}Vlogapp{% endblock %}</title>
+    <!-- defining webpage title, shown in broser tab and search results. block title allows child templates to inheritand define their own titles-->
+
+    <link rel="stylesheet" href="{% static 'output.css' %}">
+
+    <!-- lining external file for styling the page, the file contains the styles used from Tailwind CSS-->
+</head>
+<body  class="h-full bg-gray-800 text-gray-300">
+    <!-- going for a allround dark look with dark colors, body element contains all the visible content on the page-->
+
+    <header style="height: 100px;" class="bg-gray-900 text-white shadow-lg py-4">
+        <h1 style="height: 50px;" class="text-6x1 font-bold">Vlogapp</h1>
+        <!-- dark header to mage the main page, witch shadow effect-->
+
+        <nav class="container mx-auto flex justify-between items-center py-4">
+            <!--
+            nav is the navigation bar element, container ensures everything is centered and responsive    
+            mx auto ensures that things are horizontal
+            flex enebales flexbox for aranging things, justify-between for even spacing and items-center for vertical centering in the header
+            -->
+        
+            <a href="{% url 'vlogpost_list' %}" class="text-2x1 font-bold text-white hover:text-gray-400">
+                <!-- 
+                The `<a>` tag represents a clickable link.
+                - `{% url 'vlogpost_list' %}` generates a dynamic URL for the "vlogpost_list" view in Django.
+                - `text-2xl`: Sets the font size to extra-large.
+                -    `font-bold`: Makes the text bold for emphasis.
+                - `text-white`: Sets the text color.
+                - `hover:text`: Changes the text color to a darker clolor on hover. 
+                -->
+                Home <!--could be changed to logo later, users click here to go home-->
+            </a>
+        
+            <div class="flex space-x-8">
+                <!-- 
+                div element groups the links    
+                flex uses flexbox for horizontal layout
+                space-x-8: adds horizontal spacing 2rem between elements inside the div
+                -->
+                <span class="text-white text-lg font-semibold ml">Vlogapp</span>
+                <!-- span element is an inline container for text-->
+            </div>
+
+        </nav>
+    </header>
+
+    <main class="container mx-auto py-8 flex-grow">
+        <!-- main content section
+        The `<main>` element represents the primary content of the page.
+        - `container`: Ensures the content is centered and responsive.
+        - `mx-auto`: Centers the main content horizontally.
+        - `py-8`: Adds vertical padding (2rem) to separate it from the header and footer.
+        -->
+        {% block content %}
+            <!-- block content defines a placeholder, child templates will replace the block with their own content-->
+        {% endblock %}
+    </main>
+<!--
+    <footer class="bg-gray-900 text-white shadow-lg py-4 text-center">
+        bottom element - turn this back into a comment if you use footer later
+        <p>&copy; 2024 The algorithmists. All rights reserved.</p>
+
+    </footer>
+-->
+</body>
+</html>
+

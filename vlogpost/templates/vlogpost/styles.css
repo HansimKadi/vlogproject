@@ -1,0 +1,3 @@
+.modal {
+    z-index: 1050; /* Ensure this is higher than any potential overlapping elements */
+}
